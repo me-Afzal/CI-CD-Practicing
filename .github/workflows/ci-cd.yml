@@ -30,6 +30,33 @@ jobs:
 
       - name: Run API test with pytest
         run: PYTHONPATH=. pytest test/test_app.py  
+      
+      - name: Code linting with pylint on src/
+        run: |
+          SCORE=$(pylint src/ --exit-zero | grep -oP 'rated at \K[0-9]+\.[0-9]+')
+          echo "Pylint score: $SCORE"
+          if (( $(echo "$SCORE < 7" | bc -l) )); then
+            echo "Pylint score is less than 7. Failing the workflow."
+            exit 1
+          fi
+
+      - name: Code linting with pylint on test/
+        run: |
+          SCORE=$(pylint test/ --exit-zero | grep -oP 'rated at \K[0-9]+\.[0-9]+')
+          echo "Pylint score: $SCORE"
+          if (( $(echo "$SCORE < 7" | bc -l) )); then
+            echo "Pylint score is less than 7. Failing the workflow."
+            exit 1
+          fi
+
+      - name: Code linting with pylint on app/
+        run: |
+          SCORE=$(pylint app/ --exit-zero | grep -oP 'rated at \K[0-9]+\.[0-9]+')
+          echo "Pylint score: $SCORE"
+          if (( $(echo "$SCORE < 7" | bc -l) )); then
+            echo "Pylint score is less than 7. Failing the workflow."
+            exit 1
+          fi
 
   build_and_deploy:
     name: Build and Deploy to Docker Hub
