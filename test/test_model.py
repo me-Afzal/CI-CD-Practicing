@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 model=pickle.load(open('models/model.pkl','rb'))
 
-def evaluate_model():
+def test_model_accuracy():
     df=pd.read_csv("data/IRIS.csv")
     # Labeling the species
 
